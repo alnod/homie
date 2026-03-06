@@ -6,9 +6,7 @@ plugins {
 
 android {
     namespace = "com.alnod.projectx"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.alnod.projectx"
@@ -50,6 +48,8 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.ui.graphics)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -58,15 +58,19 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    //Navigation
-    implementation("androidx.navigation:navigation-runtime-ktx:2.9.2")
-    implementation("androidx.navigation:navigation-compose:2.9.2")
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
 
-    //material icons
+    // Image Loading
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
+    // Material Icons
     implementation("androidx.compose.material:material-icons-extended")
 
-    //Lottie Dependency
+    // Lottie
     implementation("com.airbnb.android:lottie-compose:4.2.0")
 
-
+    // Accompanist
+    implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.accompanist.placeholder)
 }

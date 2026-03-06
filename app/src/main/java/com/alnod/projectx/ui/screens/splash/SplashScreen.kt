@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.alnod.projectx.R
 import com.alnod.projectx.navigation.ROUT_REGISTER
+import com.alnod.projectx.navigation.ROUT_START
 import kotlinx.coroutines.delay
 
 @Composable
@@ -24,7 +25,7 @@ fun SplashScreen(
 
     LaunchedEffect(Unit) {
         delay(3000)
-        navController.navigate(ROUT_REGISTER)
+        navController.navigate(ROUT_START)
 
     }
     Column(

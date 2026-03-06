@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.alnod.projectx.R
+import com.alnod.projectx.navigation.ROUT_LOGIN
 import com.alnod.projectx.navigation.ROUT_REGISTER
 import com.alnod.projectx.navigation.ROUT_START
 import com.alnod.projectx.ui.screens.components.OrDivider
@@ -103,7 +104,7 @@ fun RegisterScreen(
 
                 Button(
                     onClick = {
-                        navController.navigate(ROUT_REGISTER)
+                        navController.navigate(ROUT_LOGIN)
                     },
                     modifier = Modifier
                         .height(50.dp),

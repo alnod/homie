@@ -14,3 +14,8 @@ val purple = Color(0xFF5716B0)
 val blue = Color(0xFF124FDE)
 val light = Color(0xFFBDBDBD)
 val newwhite = Color(0xFFE7E5E5)
+val Orange = Color(0xFFCB9B00)
+val LightBackground = Color(0xFFF5F5F5)
+val DarkText = Color(0xFF1C1C1E)
+val Floating = Color(0xFF484848)
+

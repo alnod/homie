@@ -17,7 +17,7 @@ import com.alnod.projectx.ui.screens.start.StartScreen
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = ROUT_HOME
+    startDestination: String = ROUT_SPLASH
 ) {
 
 
@@ -35,7 +35,8 @@ fun AppNavHost(
             RegisterScreen(navController = navController)
         }
         composable(ROUT_HOME){
-            HomeScreen(navController = navController)
+            HomeScreen(navController = navController,
+                onProfileClick = {})
         }
         composable(ROUT_START){
             StartScreen(navController = navController)
