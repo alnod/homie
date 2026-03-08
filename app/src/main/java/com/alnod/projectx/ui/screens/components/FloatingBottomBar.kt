@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
+import com.alnod.projectx.ui.theme.Orange
 
 @Composable
 fun FloatingBottomBar(
@@ -104,7 +105,7 @@ fun FloatingBottomBar(
                         Icon(
                             imageVector = icon,
                             contentDescription = null,
-                            tint = if (isSelected) Color.Blue else Color.White,
+                            tint = if (isSelected) Orange else Color.White,
                             modifier = Modifier.size(
                                 if (isSelected) 28.dp else 24.dp
                             )
