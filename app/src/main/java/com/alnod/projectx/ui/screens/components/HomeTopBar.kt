@@ -3,6 +3,7 @@ package com.alnod.projectx.ui.screens.components
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Dashboard
+import androidx.compose.material.icons.filled.Dehaze
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -13,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,8 +29,8 @@ fun HomeTopBar() {
             Text(
                 text = "Homie",
                 style = MaterialTheme
-                    .typography.titleLarge,
-                modifier = Modifier.padding(start = 90.dp, end = 90.dp),
+                    .typography.titleMedium,
+                modifier = Modifier.padding(start = 80.dp, end = 80.dp),
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 color = blue
@@ -39,9 +41,9 @@ fun HomeTopBar() {
                 onClick = {},
                 modifier = Modifier.padding(start = 15.dp),
                 colors = IconButtonDefaults.iconButtonColors(
-                    contentColor = blue
+                    contentColor = Color.Black
                 )
-            ) { Icon(Icons.Filled.Dashboard, contentDescription = null)}
+            ) { Icon(Icons.Filled.Dehaze, contentDescription = null)}
         },
         actions = {
             IconButton(onClick = {},

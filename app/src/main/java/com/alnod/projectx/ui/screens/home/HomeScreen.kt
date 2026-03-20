@@ -21,6 +21,7 @@ import com.alnod.projectx.ui.screens.components.PostCard
 import com.alnod.projectx.ui.screens.components.StoriesSection
 import androidx.compose.material3.MaterialTheme
 import com.alnod.projectx.data.sampleUsers
+import com.alnod.projectx.navigation.ROUT_CHAT
 import com.alnod.projectx.ui.screens.components.HomeTopBar
 import com.alnod.projectx.viewmodels.PostViewModel
 
@@ -55,8 +56,9 @@ fun HomeScreen(navController: NavController,
         FloatingBottomBar(
             modifier = Modifier.align(Alignment.BottomCenter),
             onItemSelected = { index ->
-                if (index == 2) { // Index 2 is the Person icon
-                    onProfileClick()
+                when (index) {
+                    1 -> navController.navigate(ROUT_CHAT)
+                    2 -> onProfileClick()
                 }
             },
             selectedIndex = 0

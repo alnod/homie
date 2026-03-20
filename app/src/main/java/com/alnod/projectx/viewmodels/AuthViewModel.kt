@@ -1,6 +1,7 @@
 package com.alnod.projectx.viewmodels
 
 import androidx.lifecycle.ViewModel
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,9 +9,15 @@ import kotlinx.coroutines.flow.StateFlow
 
 class AuthViewModel : ViewModel() {
 
-    private val auth = FirebaseAuth.getInstance()
+    private val auth: FirebaseAuth? by lazy {
+        try {
+            FirebaseAuth.getInstance()
+        } catch (e: Exception) {
+            null
+        }
+    }
 
-    private val _user = MutableStateFlow<FirebaseUser?>(auth.currentUser)
+    private val _user = MutableStateFlow<FirebaseUser?>(auth?.currentUser)
     val user: StateFlow<FirebaseUser?> = _user
 
     private val _isLoading = MutableStateFlow(false)
@@ -20,12 +27,13 @@ class AuthViewModel : ViewModel() {
     val error: StateFlow<String?> = _error
 
     init {
-        auth.addAuthStateListener { firebaseAuth ->
+        auth?.addAuthStateListener { firebaseAuth ->
             _user.value = firebaseAuth.currentUser
         }
     }
 
     fun signUp(email: String, password: String) {
+        val firebaseAuth = auth ?: return
         if (email.isBlank() || password.isBlank()) {
             _error.value = "Email and password cannot be empty"
             return
@@ -34,7 +42,7 @@ class AuthViewModel : ViewModel() {
         _isLoading.value = true
         _error.value = null
 
-        auth.createUserWithEmailAndPassword(email, password)
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 _isLoading.value = false
                 if (!task.isSuccessful) {
@@ -44,6 +52,7 @@ class AuthViewModel : ViewModel() {
     }
 
     fun login(email: String, password: String) {
+        val firebaseAuth = auth ?: return
         if (email.isBlank() || password.isBlank()) {
             _error.value = "Email and password cannot be empty"
             return
@@ -52,7 +61,7 @@ class AuthViewModel : ViewModel() {
         _isLoading.value = true
         _error.value = null
 
-        auth.signInWithEmailAndPassword(email, password)
+        firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 _isLoading.value = false
                 if (!task.isSuccessful) {
@@ -62,7 +71,7 @@ class AuthViewModel : ViewModel() {
     }
 
     fun logout() {
-        auth.signOut()
+        auth?.signOut()
     }
 
     fun clearError() {
