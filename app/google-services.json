@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "241229349593",
+    "project_id": "projectx-5d886",
+    "storage_bucket": "projectx-5d886.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:241229349593:android:0800a2c8cb9eec8d4074c8",
+        "android_client_info": {
+          "package_name": "com.alnod.projectx"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCA5XvChSZ3GiZdZPFFpUR-jCKbma20HQk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
