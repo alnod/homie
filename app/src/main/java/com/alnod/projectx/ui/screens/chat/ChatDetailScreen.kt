@@ -1,5 +1,6 @@
 package com.alnod.projectx.ui.screens.chat
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,10 +9,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.SentimentSatisfiedAlt
+import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,10 +35,14 @@ import com.alnod.projectx.data.sampleUsers
 import com.alnod.projectx.models.Message
 import com.alnod.projectx.models.User
 import com.alnod.projectx.ui.theme.blue
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun ChatDetailScreen(navController: NavController, userId: Int) {
     val user = sampleUsers.find { it.id == userId } ?: sampleUsers[0]
+    val context = LocalContext.current
     
     val messages = remember {
         mutableStateListOf(
@@ -49,8 +58,17 @@ fun ChatDetailScreen(navController: NavController, userId: Int) {
             .fillMaxSize()
             .background(blue)
     ) {
-        // Custom Top Bar to match the image better
-        ChatDetailHeader(user = user, onBack = { navController.popBackStack() })
+        // Header with call functionality
+        ChatDetailHeader(
+            user = user, 
+            onBack = { navController.popBackStack() },
+            onVoiceCall = { 
+                Toast.makeText(context, "Calling ${user.name}...", Toast.LENGTH_SHORT).show()
+            },
+            onVideoCall = {
+                Toast.makeText(context, "Starting video call with ${user.name}...", Toast.LENGTH_SHORT).show()
+            }
+        )
 
         // Message List Container
         Surface(
@@ -68,7 +86,7 @@ fun ChatDetailScreen(navController: NavController, userId: Int) {
                 ) {
                     item {
                         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                            Text(text = "10:00 am", color = Color.Gray, fontSize = 12.sp)
+                            Text(text = "Today", color = Color.Gray, fontSize = 12.sp)
                         }
                     }
                     items(messages) { message ->
@@ -76,19 +94,36 @@ fun ChatDetailScreen(navController: NavController, userId: Int) {
                     }
                 }
                 
-                // Input area at the bottom of the white surface
-                MessageInputArea()
+                // Input area with sending functionality
+                MessageInputArea(
+                    onSendMessage = { text ->
+                        val currentTime = SimpleDateFormat("HH:mm a", Locale.getDefault()).format(Date())
+                        messages.add(
+                            Message(
+                                id = messages.size + 1,
+                                text = text,
+                                isFromMe = true,
+                                time = currentTime
+                            )
+                        )
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-fun ChatDetailHeader(user: User, onBack: () -> Unit) {
+fun ChatDetailHeader(
+    user: User, 
+    onBack: () -> Unit,
+    onVoiceCall: () -> Unit,
+    onVideoCall: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 48.dp, bottom = 24.dp, start = 16.dp, end = 16.dp),
+            .padding(top = 48.dp, bottom = 24.dp, start = 8.dp, end = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(onClick = onBack) {
@@ -105,7 +140,7 @@ fun ChatDetailHeader(user: User, onBack: () -> Unit) {
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
                 Box(
                     modifier = Modifier
                         .size(8.dp)
@@ -115,6 +150,14 @@ fun ChatDetailHeader(user: User, onBack: () -> Unit) {
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(text = "Online", color = Color.White.copy(alpha = 0.8f), fontSize = 12.sp)
             }
+        }
+
+        IconButton(onClick = onVoiceCall) {
+            Icon(Icons.Default.Call, contentDescription = "Voice Call", tint = Color.White)
+        }
+
+        IconButton(onClick = onVideoCall) {
+            Icon(Icons.Default.Videocam, contentDescription = "Video Call", tint = Color.White)
         }
 
         IconButton(onClick = { }) {
@@ -178,7 +221,7 @@ fun MessageBubble(message: Message, user: User) {
 }
 
 @Composable
-fun MessageInputArea() {
+fun MessageInputArea(onSendMessage: (String) -> Unit) {
     var text by remember { mutableStateOf("") }
     
     Row(
@@ -217,13 +260,24 @@ fun MessageInputArea() {
         Spacer(modifier = Modifier.width(12.dp))
         
         IconButton(
-            onClick = { },
+            onClick = { 
+                if (text.isNotBlank()) {
+                    onSendMessage(text)
+                    text = ""
+                } else {
+                    // Logic for Voice recording could go here
+                }
+            },
             modifier = Modifier
                 .size(48.dp)
                 .clip(CircleShape)
                 .background(blue)
         ) {
-            Icon(Icons.Default.Mic, contentDescription = "Voice", tint = Color.White)
+            Icon(
+                imageVector = if (text.isNotBlank()) Icons.AutoMirrored.Filled.Send else Icons.Default.Mic, 
+                contentDescription = if (text.isNotBlank()) "Send" else "Voice", 
+                tint = Color.White
+            )
         }
     }
 }
