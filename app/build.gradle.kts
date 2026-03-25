@@ -54,6 +54,8 @@ dependencies {
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage)
     
     // Google Sign-In / Credentials
     implementation(libs.androidx.credentials)

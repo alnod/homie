@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,19 +17,19 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.alnod.projectx.data.sampleUsers
+import com.alnod.projectx.navigation.ROUT_ADD_POST
+import com.alnod.projectx.navigation.ROUT_CHAT
 import com.alnod.projectx.ui.screens.components.FloatingBottomBar
+import com.alnod.projectx.ui.screens.components.HomeTopBar
 import com.alnod.projectx.ui.screens.components.PostCard
 import com.alnod.projectx.ui.screens.components.StoriesSection
-import androidx.compose.material3.MaterialTheme
-import com.alnod.projectx.data.sampleUsers
-import com.alnod.projectx.navigation.ROUT_CHAT
-import com.alnod.projectx.ui.screens.components.HomeTopBar
-import com.alnod.projectx.viewmodels.PostViewModel
+import com.alnod.projectx.viewmodels.FirestoreViewModel
 
 @Composable
 fun HomeScreen(navController: NavController,
     onProfileClick: () -> Unit,
-    viewModel: PostViewModel = viewModel()
+    viewModel: FirestoreViewModel = viewModel()
 ) {
     val posts by viewModel.posts.collectAsState()
 
@@ -42,7 +43,12 @@ fun HomeScreen(navController: NavController,
             contentPadding = PaddingValues(bottom = 100.dp) // space for floating bar
         ) {
             item { HomeTopBar() }
-            item { StoriesSection(users = sampleUsers) }
+            item { 
+                StoriesSection(
+                    users = sampleUsers,
+                    onAddStoryClick = { navController.navigate(ROUT_ADD_POST) }
+                ) 
+            }
             
             items(posts) { post ->
                 PostCard(

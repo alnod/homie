@@ -1,6 +1,7 @@
 package com.alnod.projectx.ui.screens.post
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -22,21 +23,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.alnod.projectx.ui.theme.blue
+import com.alnod.projectx.viewmodels.FirestoreViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPostScreen(navController: NavController) {
+fun AddPostScreen(
+    navController: NavController,
+    viewModel: FirestoreViewModel = viewModel()
+) {
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     var caption by remember { mutableStateOf("") }
+    
+    val isLoading by viewModel.isLoading.collectAsState()
+    val error by viewModel.error.collectAsState()
+    val context = LocalContext.current
     
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         imageUri = uri
+    }
+
+    // Handle errors
+    LaunchedEffect(error) {
+        error?.let {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        }
     }
 
     Scaffold(
@@ -49,8 +66,27 @@ fun AddPostScreen(navController: NavController) {
                     }
                 },
                 actions = {
-                    TextButton(onClick = { /* Handle Share */ }) {
-                        Text("Share", color = blue, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp).padding(end = 16.dp),
+                            strokeWidth = 2.dp,
+                            color = blue
+                        )
+                    } else {
+                        TextButton(
+                            onClick = {
+                                if (imageUri != null) {
+                                    viewModel.uploadPost(imageUri!!, caption) {
+                                        navController.popBackStack()
+                                        Toast.makeText(context, "Post shared successfully!", Toast.LENGTH_SHORT).show()
+                                    }
+                                } else {
+                                    Toast.makeText(context, "Please select an image first", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        ) {
+                            Text("Share", color = blue, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
@@ -71,7 +107,7 @@ fun AddPostScreen(navController: NavController) {
                     .height(300.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .background(Color(0xFFF5F5F5))
-                    .clickable { launcher.launch("image/*") },
+                    .clickable(enabled = !isLoading) { launcher.launch("image/*") },
                 contentAlignment = Alignment.Center
             ) {
                 if (imageUri != null) {
@@ -103,6 +139,7 @@ fun AddPostScreen(navController: NavController) {
                 onValueChange = { caption = it },
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text("Write a caption...") },
+                enabled = !isLoading,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = blue,
                     unfocusedBorderColor = Color.LightGray

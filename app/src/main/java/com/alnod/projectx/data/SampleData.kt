@@ -12,9 +12,9 @@ val sampleUsers = listOf(
 )
 
 val samplePosts = listOf(
-    Post(1, sampleUsers[0], "https://picsum.photos/seed/post1/800/800", "Beautiful mountain view!", false),
-    Post(2, sampleUsers[1], "https://picsum.photos/seed/post2/800/800", "Working on projectx!", false),
-    Post(3, sampleUsers[2], "https://picsum.photos/seed/post3/800/800", "Coffee time!", false),
-    Post(4, sampleUsers[3], "https://picsum.photos/seed/post4/800/800", "City lights.", false),
-    Post(5, sampleUsers[4], "https://picsum.photos/seed/post5/800/800", "Sunset at the beach.", false),
+    Post("1", sampleUsers[0], "https://picsum.photos/seed/post1/800/800", "Beautiful mountain view!", false),
+    Post("2", sampleUsers[1], "https://picsum.photos/seed/post2/800/800", "Working on projectx!", false),
+    Post("3", sampleUsers[2], "https://picsum.photos/seed/post3/800/800", "Coffee time!", false),
+    Post("4", sampleUsers[3], "https://picsum.photos/seed/post4/800/800", "City lights.", false),
+    Post("5", sampleUsers[4], "https://picsum.photos/seed/post5/800/800", "Sunset at the beach.", false),
 )
